@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  server:
+    image: pokemon-api
+    build:
+      context: src/
+      dockerfile: ../env/server.dockerfile
+    volumes:
+      - ./:/src
+    command:
+      - /bin/bash
+      - -c
+      - python3 app.py
+    depends_on:
+      - mongo
+    ports:
+      - 8989:8989
+
+  mongo:
+    image: mongo
+    restart: always
+    command: ["mongod"]
+    ports:
+      - 27017:27017
+    volumes:
+      - ./env/data:/data/db
+
+  redis:
+    image: "redis:alpine"
