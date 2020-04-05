@@ -2,3 +2,9 @@
 venv/
 
 env/data/
+
+.idea/
+
+src/__pycache__/
+
+*.pyc

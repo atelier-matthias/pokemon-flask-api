@@ -65,7 +65,7 @@ class PokemonJsonMapper:
             raise ValidationException.general(invalid_object)
 
         errors = {}
-        name = map_str(data, _.NAME, errors, minimal=3)
+        name = map_str(data, _.NAME, errors)
 
         if errors:
             raise ValidationException(errors)
@@ -81,7 +81,7 @@ class PokemonJsonMapper:
             _.NAME: pokemon.name,
             _.BASE_EXPERIENCE: pokemon.base_experience,
             _.HEIGHT: pokemon.height,
-            _.SPRITES: PokemonSpriteJsonMapper.to_json(pokemon.sprites),
+            _.SPRITES: PokemonSpriteJsonMapper.to_json(pokemon.sprites) if pokemon.sprites else None,
             _.WEIGHT: pokemon.weight,
             _.CREATED_AT: pokemon.created_at
         }

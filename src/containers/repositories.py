@@ -4,6 +4,7 @@ from containers import (
     BaseContainer,
     cached_property,
 )
+from encounters.repository import EncountersRepository
 from pokemons.repository import PokemonsRepository
 
 
@@ -20,3 +21,7 @@ class RepositoryContainer(SubContainer):
     @cached_property
     def pokemons(self) -> PokemonsRepository:
         return PokemonsRepository(self.mongo_connection)
+
+    @cached_property
+    def encounters(self) -> EncountersRepository:
+        return EncountersRepository(self.mongo_connection)

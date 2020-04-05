@@ -5,12 +5,7 @@ from flask import (
 )
 
 from commons.exceptions import error_handlers_map
-from config import (
-    ENV_MAP,
-)
-from bootstrap import starter
 from container import Container
-from pokemon_handlers.handlers import pokemon_page
 
 
 class PokemonApp(Flask):
@@ -23,7 +18,10 @@ class PokemonApp(Flask):
         self._services = []
 
     def build(self):
+        from bp_pokemon.handlers import pokemon_page
+        from bp_encounters.handlers import encounters_page
         self.register_blueprint(pokemon_page)
+        self.register_blueprint(encounters_page)
         self.register_errors_handlers()
         self.init_redis()
         return self
@@ -41,6 +39,8 @@ class PokemonApp(Flask):
 
 
 app = PokemonApp(__name__)
+from bootstrap import starter
+from config import ENV_MAP
 config = starter(ENV_MAP)
 app.config.from_object(config)
 

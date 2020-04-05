@@ -2,6 +2,7 @@ from typing import (
     Optional,
     List,
 )
+from uuid import UUID
 
 from commons.commands import (
     Sort,
@@ -57,6 +58,17 @@ class PokemonsRepository(MongoRepository):
 
         query = {
             _.NAME: name
+        }
+
+        result = self.collection.find_one(query)
+        if result:
+            return PokemonMongoMapper.from_mongo(result)
+
+    def get_by_id(self, pokemon_id: UUID) -> Optional[Pokemon]:
+        _ = PokemonMongoMapper.Fields
+
+        query = {
+            _.ID: pokemon_id
         }
 
         result = self.collection.find_one(query)

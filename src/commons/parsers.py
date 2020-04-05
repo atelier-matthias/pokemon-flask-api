@@ -7,6 +7,8 @@ from uuid import UUID
 
 from commons import iso8601
 
+UUID_RE = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+
 
 def parse_uuid(str_uuid: str, default=None) -> Optional[UUID]:
     try:

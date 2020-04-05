@@ -1,6 +1,7 @@
 from typing import (
     List,
     Tuple,
+    Optional,
 )
 
 from flask_redis import FlaskRedis
@@ -9,17 +10,28 @@ from commons.commands import (
     Sort,
     Pagination,
 )
+from pokemons.mappers import ExternalPokeApiValidationException
 from pokemons.model import Pokemon
 from pokemons.repository import PokemonsRepository
-from pokemons.services import PokemonApiService
+from pokemons.services import (
+    PokemonApiService,
+    PokemonApiException,
+)
 
 
 class PokemonNotFoundException(Exception):
     __slots__ = ()
 
 
+class PokemonExternalServiceException(Exception):
+    __slots__ = ('message',)
+
+    def __init__(self, message: str):
+        self.message = message
+
+
 class PokemonsCommand:
-    __slots__ = ('pokemons_repository', )
+    __slots__ = ('pokemons_repository',)
 
     def __init__(self, pokemons_repository: PokemonsRepository):
         self.pokemons_repository = pokemons_repository
@@ -40,9 +52,9 @@ class InitializePokemonRedisCommand:
             self.redis_client.set(pokemon.name, pokemon.url)
 
 
-class FetchPokemonsCommand(PokemonsCommand):
+class SearchPokemonsCommand(PokemonsCommand):
     def execute(self,
-                name: str,
+                name: Optional[str],
                 sort: Sort,
                 pagination: Pagination) -> Tuple[List[Pokemon], int]:
         pokemons = self.pokemons_repository.fetch_search(name,
@@ -77,8 +89,11 @@ class CreatePokemonCommand(PokemonsCommand):
         if not pokemon_url:
             raise PokemonNotFoundException
 
-        external_poke = self.pokemon_service.get_pokemon_by_resource_url(pokemon_url)
-        new_pokemon.enrich_from_external_pokemon(external_poke)
+        try:
+            external_poke = self.pokemon_service.get_pokemon_by_resource_url(pokemon_url)
+            new_pokemon.enrich_from_external_pokemon(external_poke)
 
-        self.pokemons_repository.insert_one(new_pokemon)
-        return new_pokemon
+            self.pokemons_repository.insert_one(new_pokemon)
+            return new_pokemon
+        except (PokemonApiException, ExternalPokeApiValidationException):
+            raise PokemonExternalServiceException("Problem with external api service")

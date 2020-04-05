@@ -6,18 +6,18 @@ from typing import (
 
 import pymongo
 
+from bp_encounters.request_mapper import EncounterJsonMapper
 from commons.commands import Sort
-from pokemons.mappers import PokemonMongoMapper
-from bp_pokemon.request_mapper import PokemonJsonMapper
+from encounters.mappers import EncounterMongoMapper
 
 
-class PokemonSortMongoMapper:
-    mongo = PokemonMongoMapper.Fields
-    json = PokemonJsonMapper.Fields
+class EncounterSortMongoMapper:
+    mongo = EncounterMongoMapper.Fields
+    json = EncounterJsonMapper.Fields
 
     TO_MONGO = {
-        json.NAME: mongo.NAME,
-        json.CREATED_AT: mongo.CREATED_AT
+        json.PLACE: mongo.PLACE,
+        json.TIMESTAMP: mongo.TIMESTAMP
     }
 
     direction: Dict[str, int] = {
