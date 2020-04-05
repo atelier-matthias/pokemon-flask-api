@@ -43,8 +43,8 @@ class TestingConfig(BaseConfig):
 
 class TestsConfig(BaseConfig):
     DB_NAME = 'pokemon-tests'
-    MONGO_URI = f'mongodb://localhost:27017/{DB_NAME}'
-    REDIS_URL = "redis://localhost:6379"
+    MONGO_URI = f'mongodb://mongo:27017/{DB_NAME}'
+    REDIS_URL = "redis://redis:6379"
     TESTING = True
 
 
