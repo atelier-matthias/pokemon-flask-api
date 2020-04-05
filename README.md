@@ -19,6 +19,13 @@ You need python3.x to run this app.
 `Mongo` - Required launched on standard `localhost:27017`  
 `Redis` - Required launched on standard `localhost:6379`
 
+Go to `/src folder`  
+`$ pip3 install -r requirements.txt`  
+`python3 app.py -c develop`
+
+`-c` parameter is for config. Available options: `develop`, `testing`, `staging`, `production`
+If You dont want to use `-c` parameter, You can use system variable `ENVIRONMENT` as same as `-c` parameter   
+
 ### By Docker
 `Docker` and `docker-compose` Required
 Just go to `/pokemon-flask-api` folder and run:
