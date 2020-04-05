@@ -207,11 +207,11 @@ limit | number | False | set limit results per page. Default `limit=25`. Max val
 page | number | False | show page number. Default value `page=0`
 
 
-## Create Pokemon
+## Create Pokemon Encounter
 
 ### HTTP Request
 
-`POST http://BASE_URL/pokemons`  
+`POST http://BASE_URL/pokemons/:POKEMON_UUID/encounter`
 
 > JSON REQUEST BODY
 
