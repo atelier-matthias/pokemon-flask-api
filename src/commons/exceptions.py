@@ -22,7 +22,12 @@ def not_found(exception: NotFound):
 
 def bad_request(exception: BadRequest):
     """Bad Request."""
-    return exception_json_response_parser(exception), exception.code
+    response = jsonify({
+        "status": exception.name,
+        "code": exception.code,
+        "details": exception.description
+    })
+    return response, exception.code
 
 
 def method_not_allowed(exception: MethodNotAllowed):

@@ -29,23 +29,23 @@ class PokemonsTests(BaseRestTestCase):
                 "name": None
             }
 
-            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.CONFLICT)
-            assert result['status'] == 'Conflict'
+            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.BAD_REQUEST)
+            assert result['status'] == 'Bad Request'
 
         with self.subTest('NAME field required'):
             json_body = {
             }
 
-            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.CONFLICT)
-            assert result['status'] == 'Conflict'
+            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.BAD_REQUEST)
+            assert result['status'] == 'Bad Request'
 
         with self.subTest('NAME field is not String'):
             json_body = {
                 "name": 1
             }
 
-            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.CONFLICT)
-            assert result['status'] == 'Conflict'
+            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.BAD_REQUEST)
+            assert result['status'] == 'Bad Request'
             details_code = result['details']['name']['code']
             assert details_code == 'INVALID_KIND'
 
@@ -53,7 +53,7 @@ class PokemonsTests(BaseRestTestCase):
                 "name": ['name']
             }
 
-            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.CONFLICT)
-            assert result['status'] == 'Conflict'
+            result = self.make_api_post('/pokemons', json_body, expected_status=HTTPStatus.BAD_REQUEST)
+            assert result['status'] == 'Bad Request'
             details_code = result['details']['name']['code']
             assert details_code == 'INVALID_KIND'

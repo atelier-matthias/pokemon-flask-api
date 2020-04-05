@@ -3,9 +3,9 @@ from flask import (
     request,
 )
 from werkzeug.exceptions import (
-    Conflict,
     NotFound,
     InternalServerError,
+    BadRequest,
 )
 
 from app import app
@@ -20,7 +20,8 @@ from pokemons.commands import (
 from bp_pokemon.request_mapper import PokemonJsonMapper
 
 pokemon_page = Blueprint('pokemon_page', __name__)
-GET_AVAILABLE_SORT = {PokemonJsonMapper.Fields.CREATED_AT}
+GET_AVAILABLE_SORT = {PokemonJsonMapper.Fields.CREATED_AT,
+                      PokemonJsonMapper.Fields.NAME}
 DEFAULT_ORDER = PokemonJsonMapper.Fields.CREATED_AT
 DEFAULT_DIRECTION = 'asc'
 MIN_SEARCH_LEN = 3
@@ -69,7 +70,7 @@ def add_pokemon():
             "pokemon": PokemonJsonMapper.to_json(result)
         })
     except ValidationException as exception:
-        raise Conflict(exception.parameters)
+        raise BadRequest(exception.parameters)
     except PokemonNotFoundException as exception:
         raise NotFound(exception)
     except PokemonExternalServiceException as exception:
